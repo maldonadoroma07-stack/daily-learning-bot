@@ -1,0 +1,28 @@
+name: Notificacion Diaria
+
+on:
+  schedule:
+    # Se ejecuta todos los días a las 13:00 UTC (8:00 AM hora Perú)
+    - cron: '0 13 * * *'
+  workflow_dispatch: # Esto activa un botón para probarlo cuando quieras
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar codigo
+        uses: actions/checkout@v3
+
+      - name: Configurar Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Instalar librerias
+        run: pip install -r requirements.txt
+
+      - name: Ejecutar script
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python main.py
